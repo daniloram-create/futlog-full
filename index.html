@@ -11,7 +11,8 @@ body{background:#f4f6fb;padding:20px}
 /* TELA DE LOGIN (BLOQUEIO INTEGRAL) */
 #loginOverlay {position:fixed;top:0;left:0;width:100%;height:100%;background:#192C53;z-index:10000;display:flex;justify-content:center;align-items:center}
 .login-box {background:#fff;padding:40px;border-radius:12px;width:380px;box-shadow:0 10px 25px rgba(0,0,0,0.3);text-align:center}
-.login-box h2 {color:#192C53;margin-bottom:20px;font-size:24px}
+.login-logo-img {max-height:35px;width:auto;margin-bottom:12px;display:block;margin-left:auto;margin-right:auto}
+.login-box h2 {color:#192C53;margin-bottom:20px;font-size:24px;letter-spacing:-0.5px}
 .login-box input {width:100%;padding:12px;margin:10px 0;border:1px solid #ccc;border-radius:8px;font-size:15px}
 .login-box button {width:100%;padding:12px;background:#192C53;color:#fff;border:none;border-radius:8px;font-weight:bold;cursor:pointer;font-size:16px}
 .login-box button:hover {background:#111f3b}
@@ -19,14 +20,20 @@ body{background:#f4f6fb;padding:20px}
 header{background:#192C53;color:#fff;padding:15px 25px;border-radius:12px;display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:20px;flex-wrap:wrap}
 header .logo-img{max-height:60px;width:auto;background:#fff;padding:6px 10px;border-radius:8px;flex-shrink:0}
 header h1{font-size:clamp(22px, 4vw, 36px);text-align:center;margin:0;font-weight:bold;letter-spacing:-0.5px;flex:1;min-width:280px}
-header .user-container-header{display:flex;align-items:center;gap:12px}
-header .user-info-header{color:#fff;font-size:14px;font-weight:bold}
-header .btn-sair{background:#c0392b;color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:12px;transition:0.2s}
-header .btn-sair:hover{background:#962d22}
+
+/* DROPDOWN ELEGANTE DE USUÁRIO */
+.dropdown-user {position: relative;display: inline-block;}
+.dropdown-btn {background: rgba(255, 255, 255, 0.1);color: #fff;border: 1px solid rgba(255, 255, 255, 0.25);padding: 8px 16px;font-weight: bold;font-size: 14px;border-radius: 8px;cursor: pointer;display: flex;align-items: center;gap: 8px;transition: 0.2s;}
+.dropdown-btn:hover {background: rgba(255, 255, 255, 0.2);border-color: rgba(255, 255, 255, 0.4);}
+.dropdown-content {display: none;position: absolute;right: 0;background-color: #fff;min-width: 210px;box-shadow: 0px 8px 24px rgba(0,0,0,0.15);border-radius: 8px;z-index: 1500;margin-top: 6px;overflow: hidden;border: 1px solid #eee;}
+.dropdown-content button {width: 100%;text-align: left;padding: 12px 16px;margin: 0;background: none;color: #333;border: none;border-bottom: 1px solid #f0f0f0;border-radius: 0;font-size: 13px;font-weight: bold;display: flex;align-items: center;gap: 8px;transition: 0.2s;cursor: pointer;}
+.dropdown-content button:last-child {border-bottom: none;}
+.dropdown-content button:hover {background-color: #f4f6fb;color: #192C53;}
+.dropdown-content button.btn-sair-dropdown:hover {background-color: #fff5f5;color: #c0392b;}
 
 .container{max-width:1700px;margin:auto;display:none} 
 
-/* GRID DE CARDS SEM ABREVIAÇÕES */
+/* GRID DE CARDS */
 .cards{display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px;margin-bottom:20px}
 .card{background:#fff;padding:15px 10px;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,.08);text-align:center;cursor:pointer;transition:.2s;border:2px solid transparent;display:flex;flex-direction:column;justify-content:center}
 .card:hover{transform:scale(1.02)}
@@ -34,7 +41,6 @@ header .btn-sair:hover{background:#962d22}
 .card h2{color:#192C53;font-size:24px}
 .card p{color:#555;margin-top:6px;font-size:12px;font-weight:bold;line-height:1.2}
 
-/* SEÇÃO DE LEGENDAS NO RODAPÉ */
 .legendas-container {background:#fff;padding:12px;border-radius:10px;margin-top:25px;margin-bottom:15px;box-shadow:0 2px 6px rgba(0,0,0,.08);display:flex;flex-wrap:wrap;gap:15px;justify-content:center;align-items:center}
 .legendas-title {font-size:12px;font-weight:bold;color:#192C53;text-transform:uppercase}
 .legenda-item {display:flex;align-items:center;gap:6px;font-size:12px;font-weight:bold;color:#444}
@@ -47,12 +53,10 @@ input,select,button{padding:10px;border:1px solid #ccc;border-radius:8px;margin:
 button{background:#192C53;color:#fff;border:none;cursor:pointer;transition:.3s}
 button:hover{opacity:.9}
 
-/* AÇÕES DA ESTEIRA */
 .actions{display:flex;flex-direction:column;gap:4px;align-items:stretch;justify-content:center;min-width:220px}
 .actions button{width:100%;padding:6px 10px;margin:0;font-size:11px;display:inline-flex;align-items:center;justify-content:center;gap:4px;border-radius:6px;font-weight:bold;color:#fff}
 .actions-adm{display:flex;gap:4px;margin-top:2px}
 .actions-adm button{flex:1}
-.btn-mudar-status {text-transform:uppercase;letter-spacing:0.3px}
 .btn-edit{background:#2a7ab0}
 .btn-del{background:#c0392b}
 
@@ -60,7 +64,6 @@ table{width:100%;border-collapse:collapse}
 th,td{padding:12px 10px;border-bottom:1px solid #eee;text-align:center;font-size:13px;vertical-align:middle}
 th{background:#192C53;color:#fff;font-weight:600}
 
-/* BADGES DE STATUS */
 .badge-status {display:inline-block;padding:5px 10px;border-radius:20px;font-size:11px;font-weight:bold;text-transform:uppercase}
 .badge-default {background:#e0e0e0;color:#424242}
 .badge-reabast {background:#bbdefb;color:#0d47a1}
@@ -71,7 +74,6 @@ th{background:#192C53;color:#fff;font-weight:600}
 .badge-expedicao {background:#dcedc8;color:#33691e}
 .badge-coletado {background:#b2dfdb;color:#004d40}
 
-/* BORDAS LARGAS DA LINHA (8PX) */
 tr.status-padrao {border-left:8px solid #616161}
 tr.status-reabast {border-left:8px solid #0d47a1}
 tr.status-canc {border-left:8px solid #b71c1c}
@@ -81,7 +83,6 @@ tr.status-conferencia {border-left:8px solid #f57f17}
 tr.status-expedicao {border-left:8px solid #33691e}
 tr.status-coletado {border-left:8px solid #004d40}
 
-/* CRITICALIDADE */
 @keyframes piscarAlertaLateral {
   0% { border-left-color: #ef5350; }
   50% { border-left-color: #f57f17; }
@@ -104,8 +105,8 @@ footer{text-align:center;padding:15px;color:#666;font-size:13px}
 .btn-pagina-num {background:#fff !important;color:#192C53 !important;border:1px solid #192C53 !important;min-width:32px;padding:6px !important;font-weight:bold}
 .btn-pagina-num.ativo {background:#192C53 !important;color:#fff !important}
 
-/* MODAIS EXCLUSIVOS */
-.modal-overlay {display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(25, 44, 83, 0.4);backdrop-filter:blur(4px);z-index:1000;justify-content:center;align-items:center;animation:fadeIn 0.2s ease-out}
+/* MODAIS */
+.modal-overlay {display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(25, 44, 83, 0.4);backdrop-filter:blur(4px);z-index:10000;justify-content:center;align-items:center;animation:fadeIn 0.2s ease-out}
 .modal-box {background:#fff;padding:25px;border-radius:12px;width:500px;max-width:90%;box-shadow:0 10px 30px rgba(0,0,0,0.15);animation:scaleUp 0.2s ease-out;max-height: 90vh; overflow-y: auto;}
 .modal-box label {font-size:12px;color:#444;display:block;margin-top:10px;margin-left:5px}
 
@@ -122,17 +123,16 @@ footer{text-align:center;padding:15px;color:#666;font-size:13px}
 </head>
 <body>
 
-<!-- TELA DE LOGIN PRE-ACESSO -->
 <div id="loginOverlay">
   <div class="login-box">
+    <img class="login-logo-img" src="https://logodownload.org/wp-content/uploads/2026/05/fut-fanatics-logo.png" alt="FutFanatics" onerror="this.style.display='none'">
     <h2>FutLog Full</h2>
-    <input type="text" id="loginUser" placeholder="Usuário">
-    <input type="password" id="loginPass" placeholder="Senha">
+    <input type="text" id="loginUser" placeholder="Usuário" onkeydown="if(event.key === 'Enter') efetuarLogin()">
+    <input type="password" id="loginPass" placeholder="Senha" onkeydown="if(event.key === 'Enter') efetuarLogin()">
     <button onclick="efetuarLogin()">Entrar no Sistema</button>
   </div>
 </div>
 
-<!-- MODAL DE ERRO DE LOGIN -->
 <div class="modal-overlay" id="loginErrorModal" style="z-index: 10002;">
   <div class="modal-box" style="width: 360px; text-align: center; border-top: 5px solid #c0392b;">
     <h3 style="color:#c0392b; font-size: 18px; display: flex; align-items: center; justify-content: center; gap: 8px;">❌ Acesso Negado</h3>
@@ -149,13 +149,18 @@ footer{text-align:center;padding:15px;color:#666;font-size:13px}
 <header>
   <img class="logo-img" src="https://logodownload.org/wp-content/uploads/2026/05/fut-fanatics-logo.png" alt="FutFanatics" onerror="this.style.display='none'">
   <h1>Controle Operacional Full</h1>
-  <div class="user-container-header">
-    <div class="user-info-header" id="userInfoHeader">Usuário: -</div>
-    <button class="btn-sair" onclick="efetuarLogout()">Sair</button>
+  
+  <div class="dropdown-user">
+    <button class="dropdown-btn" onclick="toggleDropdown(event)">
+      👤 <span id="userInfoHeader">Usuário: -</span> ▾
+    </button>
+    <div class="dropdown-content" id="userDropdownMenu">
+      <button id="gearAdmin" onclick="abrirAdminModal()" style="display:none;">🔑 Painel do Administrador</button>
+      <button class="btn-sair-dropdown" onclick="efetuarLogout()">🚪 Sair do Sistema</button>
+    </div>
   </div>
 </header>
 
-<!-- CARDS OPERACIONAIS -->
 <div class="cards">
   <div class="card ativo" data-filtro="todos" onclick="setFiltro('todos')"><h2 id="cTotal">0</h2><p>Total</p></div>
   <div class="card" data-filtro="-" onclick="setFiltro('-')"><h2 id="cPad">0</h2><p>Novos Envios</p></div>
@@ -171,7 +176,6 @@ footer{text-align:center;padding:15px;color:#666;font-size:13px}
 
 <div id="loadingStatus" class="loading-status">🔄 Conectando ao Banco de Dados...</div>
 
-<!-- Formulário Cadastro -->
 <div class="form-box">
   <h3 style="color:#192C53;margin-bottom:10px;">Novo Cadastro de Envio</h3>
   <div class="form-grid">
@@ -197,7 +201,6 @@ footer{text-align:center;padding:15px;color:#666;font-size:13px}
   </div>
 </div>
 
-<!-- Tabela Operacional -->
 <div class="table-box">
   <div class="search-bar">
     <input id="busca" placeholder="Filtrar por envio, NF, transportadora, destino, operador ou datas..." oninput="resetarPaginaERender()">
@@ -224,7 +227,6 @@ footer{text-align:center;padding:15px;color:#666;font-size:13px}
   </div>
 </div>
 
-<!-- LEGENDA DE CORES -->
 <div class="legendas-container">
   <div class="legendas-title">Legenda de Cores do status:</div>
   <div class="legenda-item"><div class="legendas-cor" style="background:#616161"></div> Novo (-)</div>
@@ -237,10 +239,44 @@ footer{text-align:center;padding:15px;color:#666;font-size:13px}
   <div class="legenda-item"><div class="legendas-cor" style="background:#004d40"></div> Coletado</div>
 </div>
 
-<footer>© 2026 Desenvolvido por Danilo Ramirez — Direitos Reservados à Operação FutFanatics.</footer>
+<footer>© 2026 Desenvolvido por Danilo Ramires — Direitos Reservados à Operação FutFanatics.</footer>
 </div>
 
-<!-- MODAL DE CONFIRMAÇÃO -->
+<div class="modal-overlay" id="adminModal" style="z-index: 10005;">
+  <div class="modal-box" style="width: 650px; border-top: 5px solid #192C53;">
+    <h3 style="color:#192C53; margin-bottom:10px; display:flex; align-items:center; gap:6px;">🔑 Painel do Administrador — Cadastrar Novo Operador</h3>
+    <hr style="border: 0; border-top: 1px dashed #ddd; margin-bottom: 15px;">
+    
+    <div class="form-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px;">
+      <div><label>Nome do Novo Usuário (Login)</label><input id="admNovoUser" placeholder="Ex: joao.silva"></div>
+      <div><label>Senha de Acesso</label><input type="text" id="admNovaSenha" placeholder="Ex: full2026"></div>
+      <div>
+        <button style="width: 100%; margin: 0; background: #27ae60;" onclick="cadastrarNovoUsuarioBD()">Autorizar</button>
+      </div>
+    </div>
+
+    <div style="margin-top: 25px; border-top: 1px dashed #ccc; padding-top: 15px;">
+      <h4 style="color:#192C53; margin-bottom:10px; font-size:14px;">👥 Operadores com Acesso Ativo</h4>
+      <div style="overflow-x:auto; max-height: 250px;">
+        <table style="width:100%; font-size:12px; border-collapse: collapse; background:#fff;">
+          <thead>
+            <tr style="background:#eef2fa; color:#192C53;">
+              <th style="padding:8px; text-align:left;">Usuário</th>
+              <th style="padding:8px; text-align:left;">Senha Secreta</th>
+              <th style="padding:8px; text-align:center;">Ações de Controle</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyUsuariosAdmin"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="margin-top:20px; display:flex; justify-content: flex-end;">
+      <button onclick="fecharAdminModal()" style="background:#777; width:auto; padding:8px 20px; margin:0;">Fechar Painel</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="confirmModal" style="z-index: 10001;">
   <div class="modal-box" style="width: 420px; text-align: center; border-top: 5px solid #192C53;">
     <h3 id="confirmTitle" style="color:#192C53; font-size: 18px; display: flex; align-items: center; justify-content: center; gap: 8px;">⚠️ Confirmar Ação</h3>
@@ -252,7 +288,6 @@ footer{text-align:center;padding:15px;color:#666;font-size:13px}
   </div>
 </div>
 
-<!-- MODAL DE EDIÇÃO AVANÇADA -->
 <div class="modal-overlay" id="editModal">
   <div class="modal-box">
     <h3>✏️ Editar Informações Cadastrais</h3>
@@ -303,9 +338,10 @@ footer{text-align:center;padding:15px;color:#666;font-size:13px}
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz6N6gPeKQ0qXHxFZgPZKRs1O4U4zuJ-hI8AyGAuhxEnA4CkG8Bl3BQI7y2eNN85vgo/exec";
+// INSIRA ABAIXO A URL GERADA NA IMPLANTAÇÃO DO SEU GOOGLE APPS SCRIPT
+const SCRIPT_URL = "https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnRZw8LWy8SUC30lHHsI0jVwHRfpzu-JWYTY36P_n39kVtFTZ-42ul6SlkUVenj9FnuIvSqhXqSR2ywxydZzFPT7MR-MR2QlV_yW-itsxP6Ch5bTPva-at_7_wh4_-vwBE70BxA8OVVdbH8PJ3ECM1Ls7HZmFMGqe0cZepxr4Y3K4aETyl44zmCTfZt1-kTFcYgv1uOQF4LIsWqZ1-UydcUpup1PEwb_24Tk5cou7f2_09rWgZoaXtpkBKobrM8IQsrF_34k-hKMxoFq3kKP-OgE5OfRew&lib=MnKK_7MPLLmiEgTypErxhFH-zIEpQ-sDt";
 
-const USUARIOS_PERMITIDOS = {
+let USUARIOS_PERMITIDOS = {
   "danilo": "123",
   "admin": "futfanatics",
   "operador1": "full"
@@ -315,7 +351,6 @@ let registros = [];
 let filtroAtivo = 'todos';
 let paginaAtual = 1;
 const LINHAS_POR_PAGINA = 20;
-
 let acaoConfirmacaoPendente = null;
 
 const LOGOS = {
@@ -323,7 +358,101 @@ const LOGOS = {
   'Shopee': 'https://logodownload.org/wp-content/uploads/2021/03/shopee-logo.png'
 };
 
-/* MECANISMO DE CONFIRMAÇÃO MODAL TOP */
+window.addEventListener('DOMContentLoaded', () => {
+  carregarUsuariosDoSheets();
+});
+
+function toggleDropdown(event) {
+  event.stopPropagation();
+  const menu = document.getElementById('userDropdownMenu');
+  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
+
+function fecharDropdown() {
+  const menu = document.getElementById('userDropdownMenu');
+  if(menu) menu.style.display = 'none';
+}
+
+window.addEventListener('click', () => {
+  fecharDropdown();
+});
+
+function carregarUsuariosDoSheets() {
+  if (!SCRIPT_URL || SCRIPT_URL.startsWith("SUA_NOVA_SCRIPT")) {
+    renderUsuariosAdmin();
+    return;
+  }
+  fetch(SCRIPT_URL + "?tipo=usuarios")
+    .then(res => res.json())
+    .then(dados => {
+      if(Array.isArray(dados)) {
+        USUARIOS_PERMITIDOS = { "danilo": "123", "admin": "futfanatics", "operador1": "full" };
+        dados.forEach(item => {
+          USUARIOS_PERMITIDOS[item.usuario] = item.senha;
+        });
+        renderUsuariosAdmin();
+      }
+    })
+    .catch(err => console.error("Erro ao carregar banco de logins:", err));
+}
+
+function renderUsuariosAdmin() {
+  const tbody = document.getElementById('tbodyUsuariosAdmin');
+  if(!tbody) return;
+  tbody.innerHTML = '';
+  
+  Object.keys(USUARIOS_PERMITIDOS).forEach((user, index) => {
+    const senha = USUARIOS_PERMITIDOS[user];
+    const tr = document.createElement('tr');
+    tr.style.borderBottom = '1px solid #eee';
+    
+    const ehMestre = (user === 'danilo' || user === 'admin');
+    const btnExcluir = ehMestre ? '' : `<button onclick="deletarUsuarioBD('${user}')" style="background:#c0392b; padding:4px 8px; font-size:11px; margin:0; width:auto;">🗑️ Excluir</button>`;
+    
+    tr.innerHTML = `
+      <td style="padding:10px; text-align:left; font-weight:bold; color:#192C53;">${user.toUpperCase()}</td>
+      <td style="padding:10px; text-align:left; display:flex; align-items:center; gap:8px;">
+        <input type="password" id="pass_user_${index}" value="${senha}" readonly style="width:110px; padding:4px; margin:0; font-size:13px; border:none; background:transparent; font-weight:bold;">
+        <button onclick="toggleOlhinhoUser(${index})" style="background:none; color:#192C53; padding:0; margin:0; width:auto; border:none; cursor:pointer; font-size:14px;" id="btn_olho_${index}">👁️</button>
+      </td>
+      <td style="padding:10px; text-align:center;">
+        <div style="display:flex; gap:6px; justify-content:center;">
+          <button onclick="alterarSenhaUsuarioBD('${user}')" style="background:#2a7ab0; padding:4px 8px; font-size:11px; margin:0; width:auto;">✏️ Alterar Senha</button>
+          ${btnExcluir}
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function toggleOlhinhoUser(idx) {
+  const input = document.getElementById(`pass_user_${idx}`);
+  const btn = document.getElementById(`btn_olho_${idx}`);
+  if(input.type === "password") {
+    input.type = "text";
+    btn.textContent = "🙈";
+  } else {
+    input.type = "password";
+    btn.textContent = "👁️";
+  }
+}
+
+function abrirAdminModal() {
+  const u = (sessionStorage.getItem('usuarioLogado') || "").toLowerCase();
+  fecharDropdown();
+  if (u === "danilo" || u === "admin") {
+    document.getElementById('adminModal').style.display = 'flex';
+    renderUsuariosAdmin();
+  } else {
+    showToast("Acesso restrito apenas a Administradores!", "danger");
+  }
+}
+
+function fecharAdminModal() {
+  document.getElementById('adminModal').style.display = 'none';
+}
+
 function perguntarConfirmacao(titulo, mensagem, callback) {
   document.getElementById('confirmTitle').innerHTML = titulo;
   document.getElementById('confirmMessage').innerHTML = mensagem;
@@ -347,7 +476,14 @@ function efetuarLogin() {
     sessionStorage.setItem('usuarioLogado', u.toUpperCase());
     document.getElementById('loginOverlay').style.display = 'none';
     document.getElementById('mainContainer').style.display = 'block';
-    document.getElementById('userInfoHeader').textContent = `Usuário: ${u.toUpperCase()}`;
+    document.getElementById('userInfoHeader').textContent = u.toUpperCase();
+    
+    if (u === "danilo" || u === "admin") {
+      document.getElementById('gearAdmin').style.display = 'block';
+    } else {
+      document.getElementById('gearAdmin').style.display = 'none';
+    }
+    
     showToast(`Bem-vindo, ${u.toUpperCase()}!`);
     carregarDadosDoGoogleSheets();
   } else {
@@ -362,8 +498,10 @@ function fecharLoginErrorModal() {
 }
 
 function efetuarLogout() {
+  fecharDropdown();
   sessionStorage.removeItem('usuarioLogado');
   document.getElementById('mainContainer').style.display = 'none';
+  document.getElementById('gearAdmin').style.display = 'none';
   document.getElementById('loginOverlay').style.display = 'flex';
   document.getElementById('loginUser').value = '';
   document.getElementById('loginPass').value = '';
@@ -380,7 +518,67 @@ function showToast(mensagem, tipo = 'success') {
   toast.className = `toast ${tipo}`;
   toast.innerHTML = tipo === 'success' ? `✅ ${mensagem}` : `❌ ${mensagem}`;
   container.appendChild(toast);
-  setTimeout(() => toast.remove(), 9500);
+  setTimeout(() => toast.remove(), 5000);
+}
+
+function cadastrarNovoUsuarioBD() {
+  const novoU = document.getElementById('admNovoUser').value.trim().toLowerCase();
+  const novaS = document.getElementById('admNovaSenha').value.trim();
+  
+  if(!novoU || !novaS) { 
+    showToast('Preencha os campos de Usuário e Senha.', 'danger'); 
+    return; 
+  }
+  
+  perguntarConfirmacao(
+    "🔑 Cadastrar Novo Operador",
+    `Confirma o cadastro do usuário <b>${novoU.toUpperCase()}</b> para acessar o FutLog?`,
+    () => {
+      USUARIOS_PERMITIDOS[novoU] = novaS;
+      enviarParaGoogleSheets({ novoUsuario: novoU, novaSenha: novaS }, "salvar_usuario");
+      
+      document.getElementById('admNovoUser').value = '';
+      document.getElementById('admNovaSenha').value = '';
+      showToast(`Usuário ${novoU.toUpperCase()} registrado com sucesso!`);
+      renderUsuariosAdmin();
+      setTimeout(carregarUsuariosDoSheets, 1500);
+    }
+  );
+}
+
+function alterarSenhaUsuarioBD(usuario) {
+  const novaSenha = prompt(`Digite a nova senha para o operador ${usuario.toUpperCase()}:`);
+  if (novaSenha === null) return; 
+  if (novaSenha.trim() === "") {
+    showToast("A senha não pode ser vazia.", "danger");
+    return;
+  }
+  
+  perguntarConfirmacao(
+    "✏️ Alterar Senha",
+    `Deseja realmente atualizar a senha de <b>${usuario.toUpperCase()}</b>?`,
+    () => {
+      USUARIOS_PERMITIDOS[usuario] = novaSenha.trim();
+      enviarParaGoogleSheets({ usuario: usuario, novaSenha: novaSenha.trim() }, "editar_usuario");
+      showToast(`Senha de ${usuario.toUpperCase()} modificada.`);
+      renderUsuariosAdmin();
+      setTimeout(carregarUsuariosDoSheets, 1500);
+    }
+  );
+}
+
+function deletarUsuarioBD(usuario) {
+  perguntarConfirmacao(
+    "🗑️ Excluir Operador",
+    `Remover completamente o acesso de <b>${usuario.toUpperCase()}</b>?`,
+    () => {
+      delete USUARIOS_PERMITIDOS[usuario];
+      enviarParaGoogleSheets({ usuario: usuario }, "deletar_usuario");
+      showToast(`Operador ${usuario.toUpperCase()} removido.`, "danger");
+      renderUsuariosAdmin();
+      setTimeout(carregarUsuariosDoSheets, 1500);
+    }
+  );
 }
 
 function carregarDadosDoGoogleSheets() {
@@ -408,11 +606,9 @@ function carregarDadosDoGoogleSheets() {
       if (Array.isArray(dados)) {
         registros = dados.map(r => {
           if(!r.status || r.status.trim() === '') r.status = '-';
-          
           r.coleta = formatarDataEHora(r.coleta);
           r.embarque = formatarDataEHora(r.embarque);
           r.ultima_movimentacao = formatarDataEHora(r.ultima_movimentacao);
-          
           return r;
         });
         statusEl.style.display = 'none';
@@ -421,16 +617,13 @@ function carregarDadosDoGoogleSheets() {
     })
     .catch(err => {
       console.error(err);
-      statusEl.textContent = "⚠️ Erro de conexão. Simulando dados locais.";
+      statusEl.textContent = "⚠️ Erro de conexão ao banco de dados.";
       render();
     });
 }
 
 function enviarParaGoogleSheets(dados, acao = "salvar") {
-  if (!SCRIPT_URL || SCRIPT_URL.startsWith("SUA_NOVA_SCRIPT")) {
-    console.warn(`[Simulação] Dados processados localmente via ação: ${acao}`);
-    return;
-  }
+  if (!SCRIPT_URL || SCRIPT_URL.startsWith("SUA_NOVA_SCRIPT")) return;
   try {
     fetch(SCRIPT_URL, {
       method: 'POST',
@@ -452,7 +645,6 @@ function setFiltro(f){
 
 function resetarPaginaERender() { paginaAtual = 1; render(); }
 
-/* PROCESSAMENTO E FORMATAÇÃO DE DATAS COMPATÍVEL COM GOOGLE SHEETS */
 function agoraBR(){
   const d = new Date();
   return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
@@ -479,19 +671,10 @@ function converterBRParaInput(dataBR) {
 
 function formatarDataEHora(valor) {
   if (!valor || valor.trim() === "" || valor === "-") return "-";
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(valor) || /^\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}$/.test(valor)) return valor;
   
-  if (/^\d{2}\/\d{2}\/\d{4}$/.test(valor) || /^\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}$/.test(valor)) {
-    return valor;
-  }
-
-  if (/^\d{2}\/\d{2} \d{2}:\d{2}$/.test(valor)) {
-    return valor.replace(/(\d{2}\/\d{2})/, `$1/${new Date().getFullYear()}`);
-  }
-
   const d = new Date(valor);
-  if (isNaN(d.getTime())) {
-    return valor;
-  }
+  if (isNaN(d.getTime())) return valor;
 
   const dia = String(d.getDate()).padStart(2, '0');
   const mes = String(d.getMonth() + 1).padStart(2, '0');
@@ -499,11 +682,7 @@ function formatarDataEHora(valor) {
   const hora = String(d.getHours()).padStart(2, '0');
   const min = String(d.getMinutes()).padStart(2, '0');
 
-  if (d.getHours() === 0 && d.getMinutes() === 0 && d.getSeconds() === 0) {
-    return `${dia}/${mes}/${ano}`;
-  } else {
-    return `${dia}/${mes}/${ano} ${hora}:${min}`;
-  }
+  return (d.getHours() === 0 && d.getMinutes() === 0 && d.getSeconds() === 0) ? `${dia}/${mes}/${ano}` : `${dia}/${mes}/${ano} ${hora}:${min}`;
 }
 
 function cadastrarNovo(){
@@ -515,19 +694,10 @@ function cadastrarNovo(){
 
   if(!envio || !nf || !transp){ showToast('Preencha Envio, NF e Transportadora.', 'danger'); return; }
 
-  const coletaBR = converterInputParaBR(colInput);
-  
   const reg = { 
-    id: String(Date.now()), 
-    envio: envio, 
-    nf: nf, 
-    transportadora: transp, 
-    coleta: coletaBR,
-    embarque: '', 
-    destino: destino,
-    status: '-', 
-    usuario: getUsuarioAtual(), 
-    ultima_movimentacao: agoraBR() 
+    id: String(Date.now()), envio: envio, nf: nf, transportadora: transp, 
+    coleta: converterInputParaBR(colInput), embarque: '', destino: destino,
+    status: '-', usuario: getUsuarioAtual(), ultima_movimentacao: agoraBR() 
   };
   
   registros.push(reg);
@@ -583,18 +753,14 @@ function salvarEdicaoModal(){
 
 function avancarEsteira(idx, proximoStatus) {
   const r = registros[idx];
-  
   perguntarConfirmacao(
     "🔄 Mudar Status do Envio",
     `Deseja mover o envio <b>${r.envio}</b> para o status <b>${proximoStatus}</b>?`,
     () => {
       r.status = proximoStatus;
-      if (proximoStatus === 'Coletado') {
-        r.embarque = dataHojeBR();
-      }
+      if (proximoStatus === 'Coletado') r.embarque = dataHojeBR();
       r.usuario = getUsuarioAtual();
       r.ultima_movimentacao = agoraBR();
-      
       enviarParaGoogleSheets(r, "editar");
       render();
       showToast(`Envio ${r.envio} movido para: ${proximoStatus}`);
@@ -604,10 +770,9 @@ function avancarEsteira(idx, proximoStatus) {
 
 function excluir(idx){
   const r = registros[idx];
-  
   perguntarConfirmacao(
     "🗑️ Remover Registro Permanentemente",
-    `Tem certeza absoluta que deseja apagar o envio <b>${r.envio}</b> (NF: ${r.nf})? Essa ação não pode ser desfeita.`,
+    `Tem certeza que deseja apagar o envio <b>${r.envio}</b>? Essa ação é irreversível.`,
     () => {
       enviarParaGoogleSheets(registros[idx], "deletar");
       registros.splice(idx,1);
@@ -620,7 +785,6 @@ function excluir(idx){
 function diasAteColeta(dataBR){
   if(!dataBR || !dataBR.includes('/')) return 999;
   const partes = dataBR.split(' ')[0].split('/');
-  if(partes.length !== 3) return 999;
   const dt = new Date(`${partes[2]}-${partes[1]}-${partes[0]}T00:00:00`);
   if(isNaN(dt.getTime())) return 999;
   const hoje = new Date(); hoje.setHours(0,0,0,0);
@@ -634,7 +798,6 @@ function renderTransp(nome){
 
 function obtenerRegistrosFiltrados() {
   const termo = document.getElementById('busca').value.toLowerCase();
-  
   return registros.map((reg, originalIdx) => ({ ...reg, originalIdx })).filter(r => {
     const d = diasAteColeta(r.coleta);
     const atrasado = r.status !== 'Coletado' && r.status !== 'Cancelado' && d <= 4;
@@ -642,9 +805,8 @@ function obtenerRegistrosFiltrados() {
     if(filtroAtivo === 'atraso' && !atrasado) return false;
     if(filtroAtivo !== 'todos' && filtroAtivo !== 'atraso' && r.status !== filtroAtivo) return false;
     
-    const blob = `${r.envio} ${r.nf} ${r.transportadora} ${r.destino} ${r.status} ${r.usuario} ${r.coleta} ${r.embarque}`.toLowerCase();
-    if(termo && !blob.includes(termo)) return false;
-    return true;
+    const blob = `${r.envio} ${r.nf} ${r.transportadora} ${r.destino} ${r.status} ${r.usuario} ${r.coleta}`.toLowerCase();
+    return !(termo && !blob.includes(termo));
   });
 }
 
@@ -655,14 +817,12 @@ function irParaPagina(num) { paginaAtual = num; render(); }
 function render(){
   const tbody = document.getElementById('tbody');
   tbody.innerHTML = '';
-
   let tot=0, pad=0, rea=0, can=0, apt=0, sep=0, con=0, exp=0, col=0, atr=0;
   
   registros.forEach(r => {
     tot++;
     const d = diasAteColeta(r.coleta);
     if(r.status !== 'Coletado' && r.status !== 'Cancelado' && d <= 4) atr++;
-    
     if(r.status === '-') pad++;
     else if(r.status === 'Aguardando Reabastecimento') rea++;
     else if(r.status === 'Cancelado') can++;
@@ -695,7 +855,6 @@ function render(){
 
   daPagina.forEach((r) => {
     const tr = document.createElement('tr');
-    
     let classeStatus = 'status-padrao';
     if(r.status === 'Aguardando Reabastecimento') classeStatus = 'status-reabast';
     if(r.status === 'Cancelado') classeStatus = 'status-canc';
@@ -708,11 +867,8 @@ function render(){
 
     if(r.status !== 'Coletado' && r.status !== 'Cancelado') {
       const dias = diasAteColeta(r.coleta);
-      if(dias <= 2) {
-        tr.classList.add('alerta-piscante'); 
-      } else if(dias <= 4) {
-        tr.classList.add('alerta-critico'); 
-      }
+      if(dias <= 2) tr.classList.add('alerta-piscante'); 
+      else if(dias <= 4) tr.classList.add('alerta-critico'); 
     }
 
     let bAcao = '';
