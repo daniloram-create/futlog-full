@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FutFull - Controle Operacional Full</title>
+<title>FutLog Full - Controle Operacional Full</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{background:#f4f6fb;padding:20px}
@@ -122,6 +122,7 @@ footer{text-align:center;padding:15px;color:#666;font-size:13px}
 </head>
 <body>
 
+<!-- TELA DE LOGIN PRE-ACESSO -->
 <div id="loginOverlay">
   <div class="login-box">
     <h2>FutLog Full</h2>
@@ -131,6 +132,7 @@ footer{text-align:center;padding:15px;color:#666;font-size:13px}
   </div>
 </div>
 
+<!-- MODAL DE ERRO DE LOGIN -->
 <div class="modal-overlay" id="loginErrorModal" style="z-index: 10002;">
   <div class="modal-box" style="width: 360px; text-align: center; border-top: 5px solid #c0392b;">
     <h3 style="color:#c0392b; font-size: 18px; display: flex; align-items: center; justify-content: center; gap: 8px;">❌ Acesso Negado</h3>
@@ -153,6 +155,7 @@ footer{text-align:center;padding:15px;color:#666;font-size:13px}
   </div>
 </header>
 
+<!-- CARDS OPERACIONAIS -->
 <div class="cards">
   <div class="card ativo" data-filtro="todos" onclick="setFiltro('todos')"><h2 id="cTotal">0</h2><p>Total</p></div>
   <div class="card" data-filtro="-" onclick="setFiltro('-')"><h2 id="cPad">0</h2><p>Novos Envios</p></div>
@@ -168,6 +171,7 @@ footer{text-align:center;padding:15px;color:#666;font-size:13px}
 
 <div id="loadingStatus" class="loading-status">🔄 Conectando ao Banco de Dados...</div>
 
+<!-- Formulário Cadastro -->
 <div class="form-box">
   <h3 style="color:#192C53;margin-bottom:10px;">Novo Cadastro de Envio</h3>
   <div class="form-grid">
@@ -193,6 +197,7 @@ footer{text-align:center;padding:15px;color:#666;font-size:13px}
   </div>
 </div>
 
+<!-- Tabela Operacional -->
 <div class="table-box">
   <div class="search-bar">
     <input id="busca" placeholder="Filtrar por envio, NF, transportadora, destino, operador ou datas..." oninput="resetarPaginaERender()">
@@ -219,6 +224,7 @@ footer{text-align:center;padding:15px;color:#666;font-size:13px}
   </div>
 </div>
 
+<!-- LEGENDA DE CORES -->
 <div class="legendas-container">
   <div class="legendas-title">Legenda de Cores do status:</div>
   <div class="legenda-item"><div class="legendas-cor" style="background:#616161"></div> Novo (-)</div>
@@ -231,9 +237,10 @@ footer{text-align:center;padding:15px;color:#666;font-size:13px}
   <div class="legenda-item"><div class="legendas-cor" style="background:#004d40"></div> Coletado</div>
 </div>
 
-<footer>© 2026 Desenvolvido por Danilo Ramires — Direitos Reservados à Operação FutFanatics.</footer>
+<footer>© 2026 Desenvolvido por Danilo Ramirez — Direitos Reservados à Operação FutFanatics.</footer>
 </div>
 
+<!-- MODAL DE CONFIRMAÇÃO -->
 <div class="modal-overlay" id="confirmModal" style="z-index: 10001;">
   <div class="modal-box" style="width: 420px; text-align: center; border-top: 5px solid #192C53;">
     <h3 id="confirmTitle" style="color:#192C53; font-size: 18px; display: flex; align-items: center; justify-content: center; gap: 8px;">⚠️ Confirmar Ação</h3>
@@ -245,6 +252,7 @@ footer{text-align:center;padding:15px;color:#666;font-size:13px}
   </div>
 </div>
 
+<!-- MODAL DE EDIÇÃO AVANÇADA -->
 <div class="modal-overlay" id="editModal">
   <div class="modal-box">
     <h3>✏️ Editar Informações Cadastrais</h3>
@@ -298,10 +306,9 @@ footer{text-align:center;padding:15px;color:#666;font-size:13px}
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz6N6gPeKQ0qXHxFZgPZKRs1O4U4zuJ-hI8AyGAuhxEnA4CkG8Bl3BQI7y2eNN85vgo/exec";
 
 const USUARIOS_PERMITIDOS = {
-  "danilo": "1234",
-  "jean": "1234",
-  "josé": "1234",
-  "felipe": "1234"
+  "danilo": "123",
+  "admin": "futfanatics",
+  "operador1": "full"
 };
 
 let registros = [];
@@ -384,8 +391,8 @@ function carregarDadosDoGoogleSheets() {
     statusEl.textContent = "⚠️ Modo de simulação local ativo (URL do Sheets não configurada).";
     if (registros.length === 0) {
       registros = [
-        { id: "1", envio: "456812", nf: "8954", transportadora: "Mercado Livre", coleta: "10/06/2026", embarque: "", destino: "São Paulo", status: "-", usuario: "DANILO", ultima_movimentacao: "06/06 10:00" },
-        { id: "2", envio: "782134", nf: "9021", transportadora: "Shopee", coleta: "12/06/2026", embarque: "", destino: "Presidente Prudente", status: "Apta para separação", usuario: "OPERADOR1", ultima_movimentacao: "06/06 10:15" }
+        { id: "1", envio: "456812", nf: "8954", transportadora: "Mercado Livre", coleta: "10/06/2026", embarque: "", destino: "São Paulo", status: "-", usuario: "DANILO", ultima_movimentacao: "06/06/2026 10:00" },
+        { id: "2", envio: "782134", nf: "9021", transportadora: "Shopee", coleta: "12/06/2026", embarque: "", destino: "Presidente Prudente", status: "Apta para separação", usuario: "OPERADOR1", ultima_movimentacao: "06/06/2026 10:15" }
       ];
     }
     render();
@@ -401,6 +408,11 @@ function carregarDadosDoGoogleSheets() {
       if (Array.isArray(dados)) {
         registros = dados.map(r => {
           if(!r.status || r.status.trim() === '') r.status = '-';
+          
+          r.coleta = formatarDataEHora(r.coleta);
+          r.embarque = formatarDataEHora(r.embarque);
+          r.ultima_movimentacao = formatarDataEHora(r.ultima_movimentacao);
+          
           return r;
         });
         statusEl.style.display = 'none';
@@ -440,9 +452,10 @@ function setFiltro(f){
 
 function resetarPaginaERender() { paginaAtual = 1; render(); }
 
+/* PROCESSAMENTO E FORMATAÇÃO DE DATAS COMPATÍVEL COM GOOGLE SHEETS */
 function agoraBR(){
   const d = new Date();
-  return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+  return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
 }
 
 function dataHojeBR(){
@@ -459,8 +472,38 @@ function converterInputParaBR(dataInput) {
 
 function converterBRParaInput(dataBR) {
   if(!dataBR || !dataBR.includes('/')) return "";
-  const partes = dataBR.split('/');
+  const apenasData = dataBR.split(' ')[0];
+  const partes = apenasData.split('/');
   return `${partes[2]}-${partes[1]}-${partes[0]}`;
+}
+
+function formatarDataEHora(valor) {
+  if (!valor || valor.trim() === "" || valor === "-") return "-";
+  
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(valor) || /^\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}$/.test(valor)) {
+    return valor;
+  }
+
+  if (/^\d{2}\/\d{2} \d{2}:\d{2}$/.test(valor)) {
+    return valor.replace(/(\d{2}\/\d{2})/, `$1/${new Date().getFullYear()}`);
+  }
+
+  const d = new Date(valor);
+  if (isNaN(d.getTime())) {
+    return valor;
+  }
+
+  const dia = String(d.getDate()).padStart(2, '0');
+  const mes = String(d.getMonth() + 1).padStart(2, '0');
+  const ano = d.getFullYear();
+  const hora = String(d.getHours()).padStart(2, '0');
+  const min = String(d.getMinutes()).padStart(2, '0');
+
+  if (d.getHours() === 0 && d.getMinutes() === 0 && d.getSeconds() === 0) {
+    return `${dia}/${mes}/${ano}`;
+  } else {
+    return `${dia}/${mes}/${ano} ${hora}:${min}`;
+  }
 }
 
 function cadastrarNovo(){
@@ -497,7 +540,6 @@ function cadastrarNovo(){
   showToast("Novo lote adicionado com status '-' !");
 }
 
-// ... Resto das funções internas (editar, salvarEdicaoModal, avancarEsteira, excluir, render) idênticas e operacionais ...
 function editar(idx){
   const r = registros[idx];
   document.getElementById('modalId').value       = idx;
@@ -577,7 +619,7 @@ function excluir(idx){
 
 function diasAteColeta(dataBR){
   if(!dataBR || !dataBR.includes('/')) return 999;
-  const partes = dataBR.split('/');
+  const partes = dataBR.split(' ')[0].split('/');
   if(partes.length !== 3) return 999;
   const dt = new Date(`${partes[2]}-${partes[1]}-${partes[0]}T00:00:00`);
   if(isNaN(dt.getTime())) return 999;
