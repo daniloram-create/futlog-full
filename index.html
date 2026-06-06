@@ -339,7 +339,7 @@ footer{text-align:center;padding:15px;color:#666;font-size:13px}
 
 <script>
 // INSIRA ABAIXO A URL GERADA NA IMPLANTAÇÃO DO SEU GOOGLE APPS SCRIPT
-const SCRIPT_URL = "https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnRZw8LWy8SUC30lHHsI0jVwHRfpzu-JWYTY36P_n39kVtFTZ-42ul6SlkUVenj9FnuIvSqhXqSR2ywxydZzFPT7MR-MR2QlV_yW-itsxP6Ch5bTPva-at_7_wh4_-vwBE70BxA8OVVdbH8PJ3ECM1Ls7HZmFMGqe0cZepxr4Y3K4aETyl44zmCTfZt1-kTFcYgv1uOQF4LIsWqZ1-UydcUpup1PEwb_24Tk5cou7f2_09rWgZoaXtpkBKobrM8IQsrF_34k-hKMxoFq3kKP-OgE5OfRew&lib=MnKK_7MPLLmiEgTypErxhFH-zIEpQ-sDt";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz6N6gPeKQ0qXHxFZgPZKRs1O4U4zuJ-hI8AyGAuhxEnA4CkG8Bl3BQI7y2eNN85vgo/exec"; // Cole a nova URL de implantação aqui!
 
 let USUARIOS_PERMITIDOS = {
   "danilo": "123",
@@ -386,9 +386,9 @@ function carregarUsuariosDoSheets() {
     .then(res => res.json())
     .then(dados => {
       if(Array.isArray(dados)) {
-        USUARIOS_PERMITIDOS = { "danilo": "123", "admin": "futfanatics", "operador1": "full" };
+        USUARIOS_PERMITIDOS = { "danilo": "123", "admin": "futfanatics" };
         dados.forEach(item => {
-          USUARIOS_PERMITIDOS[item.usuario] = item.senha;
+          if (item.usuario) USUARIOS_PERMITIDOS[item.usuario] = item.senha;
         });
         renderUsuariosAdmin();
       }
@@ -400,7 +400,6 @@ function renderUsuariosAdmin() {
   const tbody = document.getElementById('tbodyUsuariosAdmin');
   if(!tbody) return;
   tbody.innerHTML = '';
-  
   Object.keys(USUARIOS_PERMITIDOS).forEach((user, index) => {
     const senha = USUARIOS_PERMITIDOS[user];
     const tr = document.createElement('tr');
@@ -471,7 +470,6 @@ function responderConfirmacao(aceito) {
 function efetuarLogin() {
   const u = document.getElementById('loginUser').value.trim().toLowerCase();
   const s = document.getElementById('loginPass');
-  
   if (USUARIOS_PERMITIDOS[u] && USUARIOS_PERMITIDOS[u] === s.value) {
     sessionStorage.setItem('usuarioLogado', u.toUpperCase());
     document.getElementById('loginOverlay').style.display = 'none';
@@ -524,10 +522,9 @@ function showToast(mensagem, tipo = 'success') {
 function cadastrarNovoUsuarioBD() {
   const novoU = document.getElementById('admNovoUser').value.trim().toLowerCase();
   const novaS = document.getElementById('admNovaSenha').value.trim();
-  
   if(!novoU || !novaS) { 
     showToast('Preencha os campos de Usuário e Senha.', 'danger'); 
-    return; 
+    return;
   }
   
   perguntarConfirmacao(
@@ -584,7 +581,6 @@ function deletarUsuarioBD(usuario) {
 function carregarDadosDoGoogleSheets() {
   if(!sessionStorage.getItem('usuarioLogado')) return;
   const statusEl = document.getElementById('loadingStatus');
-
   if (!SCRIPT_URL || SCRIPT_URL.startsWith("SUA_NOVA_SCRIPT")) {
     statusEl.textContent = "⚠️ Modo de simulação local ativo (URL do Sheets não configurada).";
     if (registros.length === 0) {
@@ -599,7 +595,6 @@ function carregarDadosDoGoogleSheets() {
 
   statusEl.style.display = 'block';
   statusEl.textContent = "🔄 Conectando ao Banco de Dados...";
-
   fetch(SCRIPT_URL)
     .then(response => response.json())
     .then(dados => {
@@ -622,15 +617,15 @@ function carregarDadosDoGoogleSheets() {
     });
 }
 
+/* CORREÇÃO AQUI - Removido modo no-cors e ajustado Header para text/plain para ignorar preflight rules no Apps Script */
 function enviarParaGoogleSheets(dados, acao = "salvar") {
   if (!SCRIPT_URL || SCRIPT_URL.startsWith("SUA_NOVA_SCRIPT")) return;
   try {
     fetch(SCRIPT_URL, {
       method: 'POST',
-      mode: 'no-cors', 
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ ...dados, acao: acao })
-    });
+    }).catch(e => console.error("Erro na requisição Fetch:", e));
   } catch(e) {
     console.error("Erro ao enviar dados para a API:", e);
   }
@@ -675,13 +670,11 @@ function formatarDataEHora(valor) {
   
   const d = new Date(valor);
   if (isNaN(d.getTime())) return valor;
-
   const dia = String(d.getDate()).padStart(2, '0');
   const mes = String(d.getMonth() + 1).padStart(2, '0');
   const ano = d.getFullYear();
   const hora = String(d.getHours()).padStart(2, '0');
   const min = String(d.getMinutes()).padStart(2, '0');
-
   return (d.getHours() === 0 && d.getMinutes() === 0 && d.getSeconds() === 0) ? `${dia}/${mes}/${ano}` : `${dia}/${mes}/${ano} ${hora}:${min}`;
 }
 
@@ -691,7 +684,6 @@ function cadastrarNovo(){
   const transp     = document.getElementById('fTransp').value;
   const destino    = document.getElementById('fDestino').value;
   const colInput   = document.getElementById('fColeta').value;
-
   if(!envio || !nf || !transp){ showToast('Preencha Envio, NF e Transportadora.', 'danger'); return; }
 
   const reg = { 
@@ -699,8 +691,7 @@ function cadastrarNovo(){
     coleta: converterInputParaBR(colInput), embarque: '', destino: destino,
     status: '-', usuario: getUsuarioAtual(), ultima_movimentacao: agoraBR() 
   };
-  
-  registros.push(reg);
+  registros.unshift(reg); // Joga pro começo pra aparecer primeiro
   enviarParaGoogleSheets(reg, "salvar"); 
   
   document.getElementById('fEnvio').value = '';
@@ -728,7 +719,6 @@ function fecharModal(){ document.getElementById('editModal').style.display = 'no
 function salvarEdicaoModal(){
   const idx = document.getElementById('modalId').value;
   const r = registros[idx];
-  
   perguntarConfirmacao(
     "✏️ Confirmar Alterações",
     `Deseja salvar as edições manuais feitas no envio <b>${r.envio}</b>?`,
@@ -796,7 +786,7 @@ function renderTransp(nome){
   return url ? `<img class="logo-transp" src="${url}" alt="${nome}">` : (nome || '-');
 }
 
-function obtenerRegistrosFiltrados() {
+function obterRegistrosFiltrados() {
   const termo = document.getElementById('busca').value.toLowerCase();
   return registros.map((reg, originalIdx) => ({ ...reg, originalIdx })).filter(r => {
     const d = diasAteColeta(r.coleta);
@@ -811,7 +801,11 @@ function obtenerRegistrosFiltrados() {
 }
 
 function paginaAnterior() { if(paginaAtual > 1) { paginaAtual--; render(); } }
-function proximaPagina() { const filtrados = obtenerRegistrosFiltrados(); const maxPaginas = Math.ceil(filtrados.length / LINHAS_POR_PAGINA); if(paginaAtual < maxPaginas) { paginaAtual++; render(); } }
+function proximaPagina() { 
+  const filtrados = obterRegistrosFiltrados();
+  const maxPaginas = Math.ceil(filtrados.length / LINHAS_POR_PAGINA); 
+  if(paginaAtual < maxPaginas) { paginaAtual++; render(); } 
+}
 function irParaPagina(num) { paginaAtual = num; render(); }
 
 function render(){
@@ -832,7 +826,7 @@ function render(){
     else if(r.status === 'Em Expedição') exp++;
     else if(r.status === 'Coletado') col++;
   });
-
+  
   document.getElementById('cTotal').textContent = tot;
   document.getElementById('cPad').textContent   = pad;
   document.getElementById('cRea').textContent   = rea;
@@ -844,15 +838,15 @@ function render(){
   document.getElementById('cCol').textContent   = col;
   document.getElementById('cAtr').textContent   = atr;
 
-  const filtrados = obtenerRegistrosFiltrados();
+  const filtrados = obterRegistrosFiltrados();
   const totalFiltrados = filtrados.length;
   const maxPaginas = Math.ceil(totalFiltrados / LINHAS_POR_PAGINA) || 1;
   if(paginaAtual > maxPaginas) paginaAtual = maxPaginas;
-
+  
   const indiceInicial = (paginaAtual - 1) * LINHAS_POR_PAGINA;
   const indiceFinal = Math.min(indiceInicial + LINHAS_POR_PAGINA, totalFiltrados);
   const daPagina = filtrados.slice(indiceInicial, indiceFinal);
-
+  
   daPagina.forEach((r) => {
     const tr = document.createElement('tr');
     let classeStatus = 'status-padrao';
@@ -898,7 +892,7 @@ function render(){
     if(r.status === 'Em conferência') badgeStyle = 'badge-conferencia';
     if(r.status === 'Em Expedição') badgeStyle = 'badge-expedicao';
     if(r.status === 'Coletado') badgeStyle = 'badge-coletado';
-
+    
     tr.innerHTML = `
       <td><b>${r.envio||'-'}</b></td>
       <td>${r.nf||'-'}</td>
