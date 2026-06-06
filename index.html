@@ -343,8 +343,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz6N6gPeKQ0qXHxFZgPZ
 
 let USUARIOS_PERMITIDOS = {
   "danilo": "123",
-  "admin": "futfanatics",
-  "operador1": "full"
+  "admin": "futfanatics"
 };
 
 let registros = [];
@@ -388,7 +387,12 @@ function carregarUsuariosDoSheets() {
       if(Array.isArray(dados)) {
         USUARIOS_PERMITIDOS = { "danilo": "123", "admin": "futfanatics" };
         dados.forEach(item => {
-          if (item.usuario) USUARIOS_PERMITIDOS[item.usuario] = item.senha;
+          if (item.usuario) {
+            // Força o usuário a ficar minúsculo e converte a senha para texto
+            let userTratado = String(item.usuario).toLowerCase().trim();
+            let senhaTratada = String(item.senha).trim();
+            USUARIOS_PERMITIDOS[userTratado] = senhaTratada;
+          }
         });
         renderUsuariosAdmin();
       }
@@ -469,8 +473,10 @@ function responderConfirmacao(aceito) {
 
 function efetuarLogin() {
   const u = document.getElementById('loginUser').value.trim().toLowerCase();
-  const s = document.getElementById('loginPass');
-  if (USUARIOS_PERMITIDOS[u] && USUARIOS_PERMITIDOS[u] === s.value) {
+  const s = document.getElementById('loginPass').value.trim();
+  
+  // Converte a senha cadastrada para texto antes de comparar
+  if (USUARIOS_PERMITIDOS[u] && String(USUARIOS_PERMITIDOS[u]) === s) {
     sessionStorage.setItem('usuarioLogado', u.toUpperCase());
     document.getElementById('loginOverlay').style.display = 'none';
     document.getElementById('mainContainer').style.display = 'block';
@@ -617,7 +623,6 @@ function carregarDadosDoGoogleSheets() {
     });
 }
 
-/* CORREÇÃO AQUI - Removido modo no-cors e ajustado Header para text/plain para ignorar preflight rules no Apps Script */
 function enviarParaGoogleSheets(dados, acao = "salvar") {
   if (!SCRIPT_URL || SCRIPT_URL.startsWith("SUA_NOVA_SCRIPT")) return;
   try {
@@ -691,7 +696,7 @@ function cadastrarNovo(){
     coleta: converterInputParaBR(colInput), embarque: '', destino: destino,
     status: '-', usuario: getUsuarioAtual(), ultima_movimentacao: agoraBR() 
   };
-  registros.unshift(reg); // Joga pro começo pra aparecer primeiro
+  registros.unshift(reg); 
   enviarParaGoogleSheets(reg, "salvar"); 
   
   document.getElementById('fEnvio').value = '';
