@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FutLog Full - Controle Operacional Full</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{background:#f4f6fb;padding:20px}
@@ -46,7 +48,7 @@ header h1{font-size:clamp(22px, 4vw, 36px);text-align:center;margin:0;font-weigh
 .legenda-item {display:flex;align-items:center;gap:6px;font-size:12px;font-weight:bold;color:#444}
 .legendas-cor {width:16px;height:16px;border-radius:4px;display:inline-block;flex-shrink:0}
 
-.form-box,.table-box{background:#fff;padding:20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.1);margin-bottom:20px}
+.form-box,.table-box, .filtros-extras-box {background:#fff;padding:20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.1);margin-bottom:20px}
 .form-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));gap:10px;align-items:end}
 .form-grid label{font-size:12px;color:#444;display:block;margin-left:6px}
 input,select,button{padding:10px;border:1px solid #ccc;border-radius:8px;margin:5px;width:calc(100% - 10px);font-size:14px}
@@ -85,13 +87,18 @@ tr.status-coletado {border-left:8px solid #004d40}
 
 @keyframes piscarAlertaLateral {
   0% { border-left-color: #ef5350; }
-  50% { border-left-color: #f57f17; }
+  50% { border-left-color: #ffffff; }
   100% { border-left-color: #ef5350; }
 }
 tr.alerta-piscante { animation: piscarAlertaLateral 1s infinite !important; }
 tr.alerta-critico { border-left: 8px solid #ef5350 !important; }
 
-.search-bar{display:flex;gap:10px;margin-bottom:10px}
+.filtros-barra {display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap;}
+.filtros-barra .bloco-filtro {display: flex; flex-direction: column; min-width: 150px;}
+.filtros-barra .bloco-filtro label {font-size:12px; color:#444; margin-left:6px; margin-bottom:2px;}
+.filtros-barra button.btn-exportar {width:auto; display:inline-flex; align-items:center; gap:6px; font-weight:bold;}
+
+.search-bar{display:flex;gap:10px;margin-bottom:10px; flex-grow: 1;}
 .logo-transp{height:22px;width:auto;object-fit:contain;vertical-align:middle;margin:0}
 footer{text-align:center;padding:15px;color:#666;font-size:13px}
 
@@ -110,7 +117,7 @@ footer{text-align:center;padding:15px;color:#666;font-size:13px}
 .modal-box {background:#fff;padding:25px;border-radius:12px;width:500px;max-width:90%;box-shadow:0 10px 30px rgba(0,0,0,0.15);animation:scaleUp 0.2s ease-out;max-height: 90vh; overflow-y: auto;}
 .modal-box label {font-size:12px;color:#444;display:block;margin-top:10px;margin-left:5px}
 
-#toast-container {position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:10px}
+#toast-container {position:fixed;bottom:20px;right:20px;z-index:11000;display:flex;flex-direction:column;gap:10px}
 .toast {background:#192C53;color:#fff;padding:14px 22px;border-radius:8px;box-shadow:0 5px 15px rgba(0,0,0,0.2);display:flex;align-items:center;gap:10px;font-weight:bold;font-size:14px;transform:translateY(100px);opacity:0;animation:slideIn 0.3s forwards, fadeOut 0.8s cubic-bezier(1,-0.02, 1, 1) 8s forwards}
 .toast.success {border-left:6px solid #27ae60}
 .toast.danger {border-left:6px solid #c0392b}
@@ -201,9 +208,26 @@ footer{text-align:center;padding:15px;color:#666;font-size:13px}
   </div>
 </div>
 
+<div class="filtros-extras-box">
+  <div class="filtros-barra">
+    <div class="bloco-filtro">
+      <label>Coleta a partir de:</label>
+      <input type="date" id="filtroDataInicio" onchange="resetarPaginaERender()" style="margin:0;">
+    </div>
+    <div class="bloco-filtro">
+      <label>Coleta até:</label>
+      <input type="date" id="filtroDataFim" onchange="resetarPaginaERender()" style="margin:0;">
+    </div>
+    <div style="flex-grow: 1;"></div>
+    <div>
+      <button class="btn-exportar" style="background:#27ae60; margin:0;" onclick="exportarExcel()">📊 Baixar Excel</button>
+    </div>
+  </div>
+</div>
+
 <div class="table-box">
   <div class="search-bar">
-    <input id="busca" placeholder="Filtrar por envio, NF, transportadora, destino, operador ou datas..." oninput="resetarPaginaERender()">
+    <input id="busca" placeholder="Filtrar por envio, NF, transportadora, destino, operador..." oninput="resetarPaginaERender()">
   </div>
   <div style="overflow-x:auto;">
     <table>
@@ -239,7 +263,7 @@ footer{text-align:center;padding:15px;color:#666;font-size:13px}
   <div class="legenda-item"><div class="legendas-cor" style="background:#004d40"></div> Coletado</div>
 </div>
 
-<footer>© 2026 Desenvolvido por Danilo Ramires — Direitos Reservados à Operação FutFanatics.</footer>
+<footer>© 2026 Desenvolvido por Danilo Ramirez — Direitos Reservados à Operação FutFanatics.</footer>
 </div>
 
 <div class="modal-overlay" id="adminModal" style="z-index: 10005;">
@@ -247,18 +271,28 @@ footer{text-align:center;padding:15px;color:#666;font-size:13px}
     <h3 style="color:#192C53; margin-bottom:10px; display:flex; align-items:center; gap:6px;">🔑 Painel do Administrador — Cadastrar Novo Operador</h3>
     <hr style="border: 0; border-top: 1px dashed #ddd; margin-bottom: 15px;">
     
-    <div class="form-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px;">
+    <div class="form-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; align-items: end;">
       <div><label>Nome do Novo Usuário (Login)</label><input id="admNovoUser" placeholder="Ex: joao.silva"></div>
-      <div><label>Senha de Acesso</label><input type="text" id="admNovaSenha" placeholder="Ex: full2026"></div>
+      <div>
+        <label>Senha de Acesso</label>
+        <div style="display:flex; align-items:center; border:1px solid #ccc; border-radius:8px; margin:5px; width:calc(100% - 10px); padding-right:8px; background:#fff;">
+          <input type="password" id="admNovaSenha" placeholder="Ex: full2026" style="border:none; margin:0; width:100%; outline:none;">
+          <button onclick="toggleOlhinhoNovoUser()" id="btn_olho_novo" style="background:none; color:#192C53; padding:0; margin:0; width:auto; border:none; cursor:pointer; font-size:16px;">👁️</button>
+        </div>
+      </div>
       <div>
         <button style="width: 100%; margin: 0; background: #27ae60;" onclick="cadastrarNovoUsuarioBD()">Autorizar</button>
       </div>
     </div>
 
     <div style="margin-top: 25px; border-top: 1px dashed #ccc; padding-top: 15px;">
-      <h4 style="color:#192C53; margin-bottom:10px; font-size:14px;">👥 Operadores com Acesso Ativo</h4>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h4 style="color:#192C53; font-size:14px; margin:0;">👥 Operadores com Acesso Ativo</h4>
+        <input type="text" id="filtroAdminUsuarios" placeholder="🔍 Buscar usuário..." oninput="filtrarUsuariosAdmin()" style="width:200px; padding:6px 10px; margin:0; font-size:12px;">
+      </div>
+      
       <div style="overflow-x:auto; max-height: 250px;">
-        <table style="width:100%; font-size:12px; border-collapse: collapse; background:#fff;">
+        <table style="width:100%; font-size:12px; border-collapse: collapse; background:#fff;" id="tabelaAdminUsuarios">
           <thead>
             <tr style="background:#eef2fa; color:#192C53;">
               <th style="padding:8px; text-align:left;">Usuário</th>
@@ -277,7 +311,7 @@ footer{text-align:center;padding:15px;color:#666;font-size:13px}
   </div>
 </div>
 
-<div class="modal-overlay" id="confirmModal" style="z-index: 10001;">
+<div class="modal-overlay" id="confirmModal" style="z-index: 10010;">
   <div class="modal-box" style="width: 420px; text-align: center; border-top: 5px solid #192C53;">
     <h3 id="confirmTitle" style="color:#192C53; font-size: 18px; display: flex; align-items: center; justify-content: center; gap: 8px;">⚠️ Confirmar Ação</h3>
     <p id="confirmMessage" style="margin: 18px 0; color: #444; font-size: 14px; line-height: 1.5;"></p>
@@ -339,7 +373,7 @@ footer{text-align:center;padding:15px;color:#666;font-size:13px}
 
 <script>
 // INSIRA ABAIXO A URL GERADA NA IMPLANTAÇÃO DO SEU GOOGLE APPS SCRIPT
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz6N6gPeKQ0qXHxFZgPZKRs1O4U4zuJ-hI8AyGAuhxEnA4CkG8Bl3BQI7y2eNN85vgo/exec"; // Cole a nova URL de implantação aqui!
+const SCRIPT_URL = "https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnSQf21Uy5vWOgrqmQS4KOj_b7GuAqmJVoftIh1-I4ZICdSuyeiI9B0o-g7bCpGwR9his9m_3L4LaJ__J6CzlqWbPZVpGQSKyJ3ps8UqPY8ytVru88N10f1jVS3mzFZKuvAf70IeiDRdBvjzSwz6MAUtpwQWzNPvDsJuO5k8gkaOA7Fa_a2dG8nDPcaKY4G336dGa1m3GJk9u4ByOgvv6KYOho8CDgkkVavG98XgRAaZKxgfHn3Ss1RSa15u3LttO7N5JDR1V1I_trm3VakaKySOBuiabA&lib=MnKK_7MPLLmiEgTypErxhFH-zIEpQ-sDt"; 
 
 let USUARIOS_PERMITIDOS = {
   "danilo": "123",
@@ -388,7 +422,6 @@ function carregarUsuariosDoSheets() {
         USUARIOS_PERMITIDOS = { "danilo": "123", "admin": "futfanatics" };
         dados.forEach(item => {
           if (item.usuario) {
-            // Força o usuário a ficar minúsculo e converte a senha para texto
             let userTratado = String(item.usuario).toLowerCase().trim();
             let senhaTratada = String(item.senha).trim();
             USUARIOS_PERMITIDOS[userTratado] = senhaTratada;
@@ -413,7 +446,7 @@ function renderUsuariosAdmin() {
     const btnExcluir = ehMestre ? '' : `<button onclick="deletarUsuarioBD('${user}')" style="background:#c0392b; padding:4px 8px; font-size:11px; margin:0; width:auto;">🗑️ Excluir</button>`;
     
     tr.innerHTML = `
-      <td style="padding:10px; text-align:left; font-weight:bold; color:#192C53;">${user.toUpperCase()}</td>
+      <td style="padding:10px; text-align:left; font-weight:bold; color:#192C53;" class="td-user-name">${user.toUpperCase()}</td>
       <td style="padding:10px; text-align:left; display:flex; align-items:center; gap:8px;">
         <input type="password" id="pass_user_${index}" value="${senha}" readonly style="width:110px; padding:4px; margin:0; font-size:13px; border:none; background:transparent; font-weight:bold;">
         <button onclick="toggleOlhinhoUser(${index})" style="background:none; color:#192C53; padding:0; margin:0; width:auto; border:none; cursor:pointer; font-size:14px;" id="btn_olho_${index}">👁️</button>
@@ -429,9 +462,30 @@ function renderUsuariosAdmin() {
   });
 }
 
+function filtrarUsuariosAdmin() {
+  const termo = document.getElementById('filtroAdminUsuarios').value.toLowerCase();
+  const trs = document.getElementById('tbodyUsuariosAdmin').getElementsByTagName('tr');
+  for (let tr of trs) {
+    const nomeUser = tr.querySelector('.td-user-name').textContent.toLowerCase();
+    tr.style.display = nomeUser.includes(termo) ? '' : 'none';
+  }
+}
+
 function toggleOlhinhoUser(idx) {
   const input = document.getElementById(`pass_user_${idx}`);
   const btn = document.getElementById(`btn_olho_${idx}`);
+  if(input.type === "password") {
+    input.type = "text";
+    btn.textContent = "🙈";
+  } else {
+    input.type = "password";
+    btn.textContent = "👁️";
+  }
+}
+
+function toggleOlhinhoNovoUser() {
+  const input = document.getElementById('admNovaSenha');
+  const btn = document.getElementById('btn_olho_novo');
   if(input.type === "password") {
     input.type = "text";
     btn.textContent = "🙈";
@@ -446,6 +500,7 @@ function abrirAdminModal() {
   fecharDropdown();
   if (u === "danilo" || u === "admin") {
     document.getElementById('adminModal').style.display = 'flex';
+    document.getElementById('filtroAdminUsuarios').value = '';
     renderUsuariosAdmin();
   } else {
     showToast("Acesso restrito apenas a Administradores!", "danger");
@@ -475,7 +530,6 @@ function efetuarLogin() {
   const u = document.getElementById('loginUser').value.trim().toLowerCase();
   const s = document.getElementById('loginPass').value.trim();
   
-  // Converte a senha cadastrada para texto antes de comparar
   if (USUARIOS_PERMITIDOS[u] && String(USUARIOS_PERMITIDOS[u]) === s) {
     sessionStorage.setItem('usuarioLogado', u.toUpperCase());
     document.getElementById('loginOverlay').style.display = 'none';
@@ -793,6 +847,9 @@ function renderTransp(nome){
 
 function obterRegistrosFiltrados() {
   const termo = document.getElementById('busca').value.toLowerCase();
+  const dInicio = document.getElementById('filtroDataInicio').value; 
+  const dFim = document.getElementById('filtroDataFim').value;
+
   return registros.map((reg, originalIdx) => ({ ...reg, originalIdx })).filter(r => {
     const d = diasAteColeta(r.coleta);
     const atrasado = r.status !== 'Coletado' && r.status !== 'Cancelado' && d <= 4;
@@ -800,9 +857,50 @@ function obterRegistrosFiltrados() {
     if(filtroAtivo === 'atraso' && !atrasado) return false;
     if(filtroAtivo !== 'todos' && filtroAtivo !== 'atraso' && r.status !== filtroAtivo) return false;
     
+    // Filtro por Data (Utiliza a Data da Coleta Full)
+    if (dInicio || dFim) {
+      const dataRegIso = converterBRParaInput(r.coleta); // Converte DD/MM/YYYY para YYYY-MM-DD
+      if (dInicio && dataRegIso < dInicio) return false;
+      if (dFim && dataRegIso > dFim) return false;
+    }
+
     const blob = `${r.envio} ${r.nf} ${r.transportadora} ${r.destino} ${r.status} ${r.usuario} ${r.coleta}`.toLowerCase();
     return !(termo && !blob.includes(termo));
   });
+}
+
+/* =========================================================
+   FUNÇÕES DE EXPORTAÇÃO
+   ========================================================= */
+function exportarExcel() {
+  if (typeof XLSX === 'undefined') { showToast("Biblioteca Excel não carregada.", "danger"); return; }
+  const filtrados = obterRegistrosFiltrados();
+  
+  if(filtrados.length === 0) { showToast("Nenhum dado para exportar.", "danger"); return; }
+
+  perguntarConfirmacao(
+    "📊 Exportar Relatório Excel",
+    `Você está prestes a baixar um arquivo Excel contendo <b>${filtrados.length}</b> registro(s). Deseja continuar?`,
+    () => {
+      const dadosExportacao = filtrados.map(r => ({
+        "Envio": r.envio || "-",
+        "NF": r.nf || "-",
+        "Transportadora": r.transportadora || "-",
+        "Destino": r.destino || "-",
+        "Data Coleta Full": r.coleta || "-",
+        "Embarque FutFanatics": r.embarque || "-",
+        "Status": r.status || "-",
+        "Última Movimentação": r.ultima_movimentacao || "-",
+        "Operador": r.usuario || "-"
+      }));
+
+      const ws = XLSX.utils.json_to_sheet(dadosExportacao);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "FutLog_Registros");
+      XLSX.writeFile(wb, "Relatorio_FutLog.xlsx");
+      showToast("Arquivo Excel gerado com sucesso!");
+    }
+  );
 }
 
 function paginaAnterior() { if(paginaAtual > 1) { paginaAtual--; render(); } }
